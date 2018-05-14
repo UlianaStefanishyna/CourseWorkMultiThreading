@@ -56,7 +56,7 @@ public class Main extends Thread {
 
         @Override
         public void run() {
-//            System.out.println("thread #" + tid + " has started");
+            System.out.println("thread #" + tid + " has started");
 
             final int Hip1 = tid * H;
             final int Hi = (tid - 1) * H;
@@ -110,12 +110,12 @@ public class Main extends Thread {
 
                 long tim = System.currentTimeMillis() - time.get();
 
-//                System.out.println("==========");
+                System.out.println("==========");
                 NumberFormat formatter = new DecimalFormat("#0.00000");
                 System.out.println("Execution time is " + formatter.format(tim / 1000d) + " seconds");
             }
 
-//            System.out.println("thread #" + tid + " has finished");
+            System.out.println("thread #" + tid + " has finished");
         }
     }
 
