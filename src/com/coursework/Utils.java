@@ -53,6 +53,49 @@ public class Utils {
         System.out.println();
     }
 
+    public int[] fillVectorBy(int value) {
+        int[] A = new int[N];
+        for (int i = 0; i < N; i++) {
+            A[i] = value;
+        }
+        return A;
+    }
+
+    public int[] multVectorMatrix(int[] A, int[][] MA, int Hi, int Hip1) {
+
+        int[] D = new int[N];
+        for (int i = Hi; i < Hip1; i++) {
+            D[i] = 0;
+            for (int j = 0; j < N; j++) {
+                D[i] += A[i] * MA[j][i];
+            }
+        }
+        return D;
+    }
+
+    public int[] multVectorVector(int[] A, int[] B, int Hi, int Hip1) {
+
+        int[] D = new int[N];
+        for (int i = Hi; i < Hip1; i++) {
+            D[i] = 0;
+            for (int j = 0; j < N; j++) {
+                D[i] += A[i] * B[j];
+            }
+        }
+        return D;
+    }
+
+
+    public int[][] fillMatrixBy(int value) {
+        int[][] MA = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                MA[i][j] = value;
+            }
+        }
+        return MA;
+    }
+
     public int[][] multMatrixMatrix(int[][] MA, int[][] MB, int Hi, int Hip1) {
         int[][] MR = new int[N][N];
         int t = 0;
@@ -63,6 +106,21 @@ public class Utils {
                     t += MA[i][k] * MB[k][j];
                 }
                 MR[i][j] = t;
+            }
+        }
+        return MR;
+    }
+
+    public int[][] multMatrixMatrixValue(int[][] MA, int[][] MB, int a, int Hi, int Hip1) {
+        int[][] MR = new int[N][N];
+        int t = 0;
+        for (int i = Hi; i < Hip1; i++) {
+            for (int j = 0; j < N; j++) {
+                t = 0;
+                for (int k = 0; k < N; k++) {
+                    t += MA[i][k] * MB[k][j];
+                }
+                MR[i][j] = t * a;
             }
         }
         return MR;

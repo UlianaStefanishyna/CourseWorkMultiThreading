@@ -3,22 +3,18 @@ package com.labwork;
 import static com.labwork.Main.N;
 
 public class MonitorResourceMT {
-    int[][] MT;
+
+    int[][] MX;
 
     public MonitorResourceMT() {
-        this.MT = new int[N][N];
+        this.MX = new int[N][N];
     }
 
-    public synchronized int[][] getMR() {
-        return MT;
+    public synchronized int[][] getMX() {
+        return MX;
     }
 
-    public synchronized void setMR(int[][] MK, int Hi, int Hip) {
-
-        for (int i = Hi, k = 0; i < Hip; i++, k++) {
-            for (int j = 0; j < N; j++) {
-                this.MT[i][j] = MK[i][j];
-            }
-        }
+    public synchronized void setMX(int[][] MX) {
+        this.MX = MX;
     }
 }

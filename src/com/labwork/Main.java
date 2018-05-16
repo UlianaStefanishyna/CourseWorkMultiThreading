@@ -1,5 +1,6 @@
 package com.labwork;
 
+import com.coursework.MonitorSynchronization;
 import com.coursework.Utils;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,6 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Author : Uliana Stefanishyna
  * Group : IO-52
  * Task : A = (B * C) * E + d * T * (MO * MT)
+ * 1 - d, MO
+ * 2 - E
+ * 3 - C
+ * 4 - A, B, MT
  */
 
 public class Main {
@@ -22,8 +27,12 @@ public class Main {
     private AtomicInteger d;
     private AtomicInteger count;
 
+    private MonitorResouceC monitorResouceC = new MonitorResouceC();
+    private MonitorResourceMT monitorResourceMT = new MonitorResourceMT();
+    private MonitorResourceMR monitorResourceMR = new MonitorResourceMR();
+    private MonitorSynchronization monitorSynchronization = new MonitorSynchronization();
 
-    Main() {
+    private Main() {
         this.MO = new int[N][N];
         this.B = new int[N];
         this.E = new int[N];
@@ -61,12 +70,34 @@ public class Main {
                 case 2:
                     E = utils.fillVectorBy(1);
                     break;
-
                 case 3:
+                    int[] C = utils.fillVectorBy(1);
+                    monitorResouceC.setC(C);
+                    monitorSynchronization.signalByInput();
                     break;
                 case 4:
+                    B = utils.fillVectorBy(1);
+                    int[][] MT = utils.fillMatrixBy(1);
+                    monitorResourceMT.setMX(MT);
+                    monitorSynchronization.signalByInput();
                     break;
             }
+
+            monitorSynchronization.waitByInput();
+
+            //copy
+            int[][] MTi = monitorResourceMT.getMX();
+
+            int[][] MRi = utils.multMatrixMatrixValue(MO, MTi, d.get(), Hi, Hip1);
+
+            monitorResourceMR.setMR(MRi, Hi, Hip1);
+
+            int[] Ci = monitorResouceC.getC();
+
+            int[] E = utils.multVectorVector(B, Ci, Hi, Hip1);
+
+
+
         }
     }
 
