@@ -1,6 +1,5 @@
 package com.labwork;
 
-import com.coursework.MonitorSynchronization;
 import com.coursework.Utils;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,18 +17,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
-    static final int P = 4;
-    static final int N = 1000;
+    public static final int P = 4;
+    static final int N = 4;
     private static final int H = N / P;
 
     private int[][] MO;
-    private int[] T, B, E;
+    private int[] T, B, E, A, C;
     private AtomicInteger d;
     private AtomicInteger count;
 
-    private MonitorResouceC monitorResouceC = new MonitorResouceC();
     private MonitorResourceMT monitorResourceMT = new MonitorResourceMT();
     private MonitorResourceMR monitorResourceMR = new MonitorResourceMR();
+    private MonitorResouceK monitorResouceK = new MonitorResouceK();
     private MonitorSynchronization monitorSynchronization = new MonitorSynchronization();
 
     private Main() {
@@ -37,6 +36,7 @@ public class Main {
         this.B = new int[N];
         this.E = new int[N];
         this.T = new int[N];
+        this.C = new int[N];
         this.d = new AtomicInteger(0);
         this.count = new AtomicInteger(1);
 
@@ -66,13 +66,15 @@ public class Main {
                 case 1:
                     d.getAndSet(1);
                     MO = utils.fillMatrixBy(1);
+                    T = utils.fillVectorBy(1);
+                    monitorSynchronization.signalByInput();
                     break;
                 case 2:
                     E = utils.fillVectorBy(1);
+                    monitorSynchronization.signalByInput();
                     break;
                 case 3:
-                    int[] C = utils.fillVectorBy(1);
-                    monitorResouceC.setC(C);
+                    C = utils.fillVectorBy(1);
                     monitorSynchronization.signalByInput();
                     break;
                 case 4:
@@ -87,17 +89,31 @@ public class Main {
 
             //copy
             int[][] MTi = monitorResourceMT.getMX();
+            int di = d.get();
 
-            int[][] MRi = utils.multMatrixMatrixValue(MO, MTi, d.get(), Hi, Hip1);
-
+            int[][] MRi = utils.multMatrixMatrixValue(MO, MTi, di, Hi, Hip1);
             monitorResourceMR.setMR(MRi, Hi, Hip1);
 
-            int[] Ci = monitorResouceC.getC();
+            int ai = utils.multVectorVector(B, C, Hi, Hip1);
+            monitorResouceK.setK(ai, tid);
 
-            int[] E = utils.multVectorVector(B, Ci, Hi, Hip1);
+            monitorSynchronization.signalByEndMult();
 
+            MRi = monitorResourceMR.getMR();
+            int a = monitorResouceK.getK();
 
+            A = utils.addVectorVector(
+                    utils.multValueVector(a, E, Hi, Hip1),
+                    utils.multVectorMatrix(T, MRi, Hi, Hip1), Hi, Hip1
+            );
 
+            monitorSynchronization.signalByEndCalc();
+
+            if (tid == 4) {
+                utils.printVector(A);
+            }
+
+            System.out.println("thread #" + tid + " has finished");
         }
     }
 

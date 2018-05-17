@@ -97,7 +97,7 @@ public class Main extends Thread {
 
             m.compareAndSet(m.get(), mi < m.get() ? mi : m.get());
 
-            monitorSynchronization.signalByMin();
+            monitorSynchronization.signalByEndMult();
 
             MA = utils.addMatrixMatrix(
                     utils.multValueMatrix(m.get(), MB, Hi, Hip1),

@@ -1,4 +1,4 @@
-package com.coursework;
+package com.labwork;
 
 import static com.labwork.Main.P;
 
@@ -17,7 +17,7 @@ public class MonitorSynchronization {
     public synchronized void signalByInput() {
         F1++;
 
-        if (F1 == P) {
+        if (F1 == 4) {
             notifyAll();
         }
     }
@@ -43,7 +43,7 @@ public class MonitorSynchronization {
     }
 
     public synchronized void waitByInput() {
-        while (F1 < P) {
+        while (F1 < 4) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -52,7 +52,7 @@ public class MonitorSynchronization {
         }
     }
 
-    private void waitThread(){
+    private void waitThread() {
         try {
             wait();
         } catch (InterruptedException e) {

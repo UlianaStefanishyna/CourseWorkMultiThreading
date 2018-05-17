@@ -15,7 +15,7 @@ public class MonitorResourceMR {
 
     public synchronized void setMR(int[][] MK, int Hi, int Hip) {
 
-        for (int i = Hi, k = 0; i < Hip; i++, k++) {
+        for (int i = Hi; i < Hip; i++) {
             for (int j = 0; j < N; j++) {
                 this.MR[i][j] = MK[i][j];
             }
